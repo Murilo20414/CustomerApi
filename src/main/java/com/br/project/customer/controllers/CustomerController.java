@@ -5,13 +5,16 @@ import com.br.project.customer.repository.CustomerRepository;
 import dto.CustomerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import javax.xml.ws.ResponseWrapper;
+import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
 @RequestMapping("/api/")
 public class CustomerController {
@@ -23,11 +26,17 @@ public class CustomerController {
         this.customerRepository = customerController;
     }
 
-    @PostMapping("customer/save")
+    @PostMapping(value = "customer/save")
     @ResponseStatus(HttpStatus.CREATED)
     public Customer save(@RequestBody @Valid CustomerDTO customerDTO) {
         Customer customer = customerDTO.convertToEntity();
         return customerRepository.save(customer);
+    }
+
+    @GetMapping(value = "customer/list")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Customer> listCustomers() {
+        return customerRepository.findAll();
     }
 
     @GetMapping("customer/{id}")
