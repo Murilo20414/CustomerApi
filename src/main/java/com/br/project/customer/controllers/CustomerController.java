@@ -2,51 +2,47 @@ package com.br.project.customer.controllers;
 
 import com.br.project.customer.domain.Customer;
 import com.br.project.customer.repository.CustomerRepository;
-import dto.CustomerDTO;
+import com.br.project.customer.dto.CustomerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
-import javax.xml.ws.ResponseWrapper;
 import java.util.List;
-import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
-@RequestMapping("/api/")
+@RequestMapping("/api/customer")
 public class CustomerController {
 
     private final CustomerRepository customerRepository;
 
     @Autowired
-    public CustomerController(CustomerRepository customerController) {
-        this.customerRepository = customerController;
+    public CustomerController(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
     }
 
-    @PostMapping(value = "customer/save")
+    @PostMapping(value = "/save")
     @ResponseStatus(HttpStatus.CREATED)
     public Customer save(@RequestBody @Valid CustomerDTO customerDTO) {
         Customer customer = customerDTO.convertToEntity();
         return customerRepository.save(customer);
     }
 
-    @GetMapping(value = "customer/list")
+    @GetMapping(value = "/list")
     @ResponseStatus(HttpStatus.OK)
     public List<Customer> listCustomers() {
         return customerRepository.findAll();
     }
 
-    @GetMapping("customer/{id}")
+    @GetMapping("/{id}")
     public Customer findById(@PathVariable Long id) {
         return customerRepository
                 .findById(id)
                 .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado"));
     }
 
-    @DeleteMapping("customer/{id}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Customer deleteById(@PathVariable Long id){
         return customerRepository
@@ -58,7 +54,7 @@ public class CustomerController {
                 .orElseThrow( () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado"));
     }
 
-    @PutMapping("customer/{id}")
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Customer updateById(@PathVariable Long id, @RequestBody @Valid CustomerDTO customerDTO) {
         return customerRepository

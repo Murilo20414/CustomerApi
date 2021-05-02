@@ -1,4 +1,4 @@
-package dto;
+package com.br.project.customer.dto;
 
 import com.br.project.customer.domain.Customer;
 import lombok.AllArgsConstructor;
